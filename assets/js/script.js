@@ -12,7 +12,7 @@ $(document).ready(function () {
     pinktest.css('background-color', 'pink');//test to see where divs borders are
 
     function getApi() {
-        var city = $('input[name="city"]').val();
+        var city = $('input[name="city"]').val().toUpperCase();
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric";
         fetch(queryURL)
         .then(function (response) {
@@ -24,6 +24,7 @@ $(document).ready(function () {
         })
         .then(function (data) {
         console.log(data);
+            //current weather section
             // add img info source http://aspsolution.net/Code/6/5240/How-to-add-image-src-dynamically-using-Jquery/
             //clear previous data, https://api.jquery.com/empty/
             currentWeather.empty();
@@ -49,6 +50,9 @@ $(document).ready(function () {
             currentWeather.append(temperature);
             currentWeather.append(humidity);
             currentWeather.append(windSpeed);
+
+            //5 day forcast
+
 
         });    
     };    
