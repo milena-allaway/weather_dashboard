@@ -6,11 +6,8 @@ $(document).ready(function () {
     var searchBtn = $('#searchBtn');
     var currentWeather = $('#currentWeather');
     var date = dayjs();
-    console.log(date.format('dddd, MMMM D YYYY'));
+    
  
-
-
-
     body.css('text-align', 'center');
     pinktest.css('background-color', 'pink');//test to see where divs borders are
 
@@ -19,18 +16,30 @@ $(document).ready(function () {
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric";
         fetch(queryURL)
         .then(function (response) {
-        return response.json();
+            if(response.ok) {
+                return response.json();
+            } else {
+                alert('Something went wrong, make sure input field is valid');
+            }
         })
         .then(function (data) {
         console.log(data);
-        
-           //clear previous data, https://api.jquery.com/empty/
+            // add img info source http://aspsolution.net/Code/6/5240/How-to-add-image-src-dynamically-using-Jquery/
+            //clear previous data, https://api.jquery.com/empty/
             currentWeather.empty();
             //append city name and date
+            var country = data.sys.country;
             var cityDate = $('<p>')
-            cityDate.text(city + ", " + date.format('MMM D, YYYY'));
+            cityDate.text(city + ", " + country + ", " + date.format('DD/MM/YYYY'));
             currentWeather.append(cityDate).css("font-weight", "bold");
-            // create/append temp,humidity,wind info
+            // create/append weather icon and get src/url
+            var weatherIcon = $('<img>');
+            var icon = data.weather[0].icon;
+            var iconUrl = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
+            console.log(iconUrl);
+            weatherIcon.attr("src", iconUrl);
+            currentWeather.append(weatherIcon);
+            // create/append temp,humidity,wind info            
             var temperature = $('<p>');
             var humidity = $('<p>');
             var windSpeed = $('<p>');
@@ -45,6 +54,7 @@ $(document).ready(function () {
     };    
 
     searchBtn.click(getApi);
+
 });
 
 //TEST AREA
@@ -61,7 +71,7 @@ $(document).ready(function () {
     
     // };
 
-//5 day forcast
+    //5 day forcast
     //https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key} 
 
     // https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
@@ -72,3 +82,5 @@ $(document).ready(function () {
     // geocoding url example
     // http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
     // use ISO 3166 country codes
+
+    //"https://openweathermap.org/img/wn/"" + icon + "@2x.png"
