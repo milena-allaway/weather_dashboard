@@ -26,13 +26,17 @@
                     <input type="text" id="cityInput" name="city" value=""><br>
                     <button id="searchBtn">search</button>
                     <div class="row">
-                        <div class="col-lg-2 pinktest" id="savedCities"><h3>saved cities</h3></div>
+                        <div class="col-sm-12 pinktest" id="savedCities">
+                            <h3>saved cities</h3>
+                            <!-- https://getbootstrap.com/docs/4.0/utilities/flex/ -->
+                            <div class="d-flex align-items-center flex-column" id="savedCityBtns"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-10"><h3>current weather</h3>
                     <div id="currentWeather"></div>
                     <div class="row">
-                        <div class="col-lg-10 pinktest"><h3>5 day forecast</h3></div>
+                        <div class="col-sm-12 pinktest"><h3>5 day forecast</h3></div>
                         <div class =row id="futureForecast">
                             <div class="col-lg-2 day1"></div>
                             <div class="col-lg-2 day2"></div>

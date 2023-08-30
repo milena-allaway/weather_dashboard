@@ -11,8 +11,10 @@ $(document).ready(function () {
     body.css('text-align', 'center');
     pinktest.css('background-color', 'pink');//test to see where divs borders are
 
+//get weather data based on searched city input
     function getApi() {
         var city = $('input[name="city"]').val().toUpperCase();
+        saveCity(city);
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric";
         fetch(queryURL)
         .then(function (response) {
@@ -115,12 +117,39 @@ $(document).ready(function () {
         });  
     };  
 
+
+    // https://stackoverflow.com/questions/65546260/  <-- include() reference
+    // save the searched city to local storage if it is not already saved
+    function saveCity(city) {
+        var savedCities = JSON.parse(localStorage.getItem('savedCities')) || [];
+        if (!savedCities.includes(city)) {
+            savedCities.push(city);
+        localStorage.setItem('savedCities',JSON.stringify(savedCities));
+        addCity();
+        }
+    };
+    
+    //create buttons for saved cities
+    function addCity (city) {
+        var savedCities = JSON.parse(localStorage.getItem('savedCities')) || [];
+        var savedBtnsDiv = $('#savedCityBtns');
+        savedBtnsDiv.empty();
+
+        savedCities.forEach(function (city) {
+            var cityBtn = $('<button>')
+            .text(city)
+            .click(function () {
+                $('input[name="city"]').val(city);
+                getApi();
+            });
+            savedBtnsDiv.append(cityBtn);
+        });
+    };
+    //add city to displayed list of saved cities
+    addCity();
+    //get weather when search button is clicked
     searchBtn.click(getApi);
-
-    // function saveCity(city) {
-    //     var savedCities = JSON.parse(localStorage.)
-
-    // }
+    $('#cityInput').val('');
 
 });
 
