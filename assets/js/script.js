@@ -2,17 +2,23 @@ $(document).ready(function () {
     var body = $('body');
     var pinktest = $('.pinktest');
     var apiKey = "8599c40ef0b71aabc78512d1ad0db1d5"; //apikey
- 
+    var currentHeader = $('#currentHeader');
+    var fiveDayHeader = $('#fiveDayHeader');
     var searchBtn = $('#searchBtn');
     var currentWeather = $('#currentWeather');
+    var day1 = $('.day1');
+    var day2 = $('.day2');
+    var day3 = $('.day3');
+    var day4 = $('.day4');
+    var day5 = $('.day5');
     var date = dayjs();
     
  
     body.css('text-align', 'center');
     pinktest.css('background-color', 'pink');//test to see where divs borders are
-
+    currentHeader.hide();
+    fiveDayHeader.hide();
     
-
     // https://stackoverflow.com/questions/65546260/  <-- include() reference
     // save the searched city to local storage if it is not already saved
     function saveCity(city) {
@@ -20,8 +26,8 @@ $(document).ready(function () {
         if (!savedCities.includes(city)) {
             savedCities.push(city);
         localStorage.setItem('savedCities',JSON.stringify(savedCities));
-        addCity();
         }
+        addCity();
     };
     
     //create buttons for saved cities
@@ -43,8 +49,11 @@ $(document).ready(function () {
         });
     };
 
-//get weather data based on searched city input
+
+    //get weather data based on searched city input
     function getWeather() {
+        currentHeader.show();
+        fiveDayHeader.show();
         var city = $('input[name="city"]').val().toUpperCase();
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric";
         fetch(queryURL)
@@ -66,6 +75,11 @@ $(document).ready(function () {
             // add img info source http://aspsolution.net/Code/6/5240/How-to-add-image-src-dynamically-using-Jquery/
             //clear previous data, https://api.jquery.com/empty/
             currentWeather.empty();
+            day1.empty();
+            day2.empty();
+            day3.empty();
+            day4.empty();
+            day5.empty();
             //append city name and date
             var country = data.sys.country;
             var cityDate = $('<p>').text(city + ", " + country + ", " + date.format('MM/DD/YYYY'));
@@ -80,8 +94,9 @@ $(document).ready(function () {
             var humidity = $('<p>').text("Humidity: " + data.main.humidity + "%");
             var windSpeed = $('<p>').text("Wind Speed: " + data.wind.speed + " m/s");
             currentWeather.append(weatherIcon, temperature, humidity, windSpeed);
-        
+
             // 5 day forcast
+
             var query5dayURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&" + "lon=" + lon + "&appid=" + apiKey + "&units=metric";
             fetch(query5dayURL)
             .then(function (response) {
@@ -93,8 +108,7 @@ $(document).ready(function () {
             })
             .then(function (data) {
             console.log(data);
-            
-                var day1 = $('.day1');
+                
                 var iconDay1 = data.list[5].weather[0].icon;
                 var iconDay1Url = "https://openweathermap.org/img/wn/" + iconDay1 + "@2x.png"
                 var weatherIconDay1 = $('<img>').attr("src", iconDay1Url);
@@ -104,7 +118,6 @@ $(document).ready(function () {
                 var date1 = $('<p>').text(dayjs().add(1, 'day').format('MM/DD/YYYY'));
                 day1.append(weatherIconDay1, date1, temperature1, humidity1, windSpeed1).css("font-weight", "bold");;
 
-                var day2 = $('.day2');
                 var iconDay2 = data.list[13].weather[0].icon;
                 var iconDay2Url = "https://openweathermap.org/img/wn/" + iconDay2 + "@2x.png"
                 var weatherIconDay2 = $('<img>').attr("src", iconDay2Url);
@@ -114,7 +127,6 @@ $(document).ready(function () {
                 var date2 = $('<p>').text(dayjs().add(2, 'day').format('MM/DD/YYYY'));
                 day2.append(weatherIconDay2, date2, temperature2, humidity2, windSpeed2).css("font-weight", "bold");;
 
-                var day3 = $('.day3');
                 var iconDay3 = data.list[21].weather[0].icon;
                 var iconDay3Url = "https://openweathermap.org/img/wn/" + iconDay3 + "@2x.png"
                 var weatherIconDay3 = $('<img>').attr("src", iconDay3Url);
@@ -124,7 +136,6 @@ $(document).ready(function () {
                 var date3 = $('<p>').text(dayjs().add(3, 'day').format('MM/DD/YYYY'));
                 day3.append(weatherIconDay3, date3, temperature3, humidity3, windSpeed3).css("font-weight", "bold");;
 
-                var day4 = $('.day4');
                 var iconDay4 = data.list[29].weather[0].icon;
                 var iconDay4Url = "https://openweathermap.org/img/wn/" + iconDay4 + "@2x.png"
                 var weatherIconDay4 = $('<img>').attr("src", iconDay4Url);
@@ -134,7 +145,6 @@ $(document).ready(function () {
                 var date4 = $('<p>').text(dayjs().add(4, 'day').format('MM/DD/YYYY'));
                 day4.append(weatherIconDay4, date4, temperature4, humidity4, windSpeed4).css("font-weight", "bold");;
 
-                var day5 = $('.day5');
                 var iconDay5 = data.list[37].weather[0].icon;
                 var iconDay5Url = "https://openweathermap.org/img/wn/" + iconDay5 + "@2x.png"
                 var weatherIconDay5 = $('<img>').attr("src", iconDay5Url);
@@ -144,17 +154,18 @@ $(document).ready(function () {
                 var date5 = $('<p>').text(dayjs().add(5, 'day').format('MM/DD/YYYY'));
                 day5.append(weatherIconDay5, date5, temperature5, humidity5, windSpeed5).css("font-weight", "bold");;
 
+            });   
 
-            });    
         });
+
         //Clear search input
         $('input[name="city"]').val("");
+
     };  
 
-    // //get weather when search button is clicked
+    //get weather when search button is clicked
     searchBtn.click(getWeather);
     addCity();
-
 
 });
 
