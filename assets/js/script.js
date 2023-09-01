@@ -5,6 +5,7 @@ $(document).ready(function () {
     var currentHeader = $('#currentHeader');
     var fiveDayHeader = $('#fiveDayHeader');
     var searchBtn = $('#searchBtn');
+    var clearBtn = $('#clearBtn');
     var currentWeather = $('#currentWeather');
     var day1 = $('.day1');
     var day2 = $('.day2');
@@ -162,6 +163,12 @@ $(document).ready(function () {
         $('input[name="city"]').val("");
 
     };  
+
+    //clear search history
+    clearBtn.click(function() {
+        localStorage.clear();
+        $('#savedCityBtns').empty();
+    });
 
     //get weather when search button is clicked
     searchBtn.click(getWeather);
