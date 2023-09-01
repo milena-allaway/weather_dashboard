@@ -11,14 +11,46 @@ $(document).ready(function () {
     body.css('text-align', 'center');
     pinktest.css('background-color', 'pink');//test to see where divs borders are
 
+    
+
+    // https://stackoverflow.com/questions/65546260/  <-- include() reference
+    // save the searched city to local storage if it is not already saved
+    function saveCity(city) {
+        var savedCities = JSON.parse(localStorage.getItem('savedCities')) || [];
+        if (!savedCities.includes(city)) {
+            savedCities.push(city);
+        localStorage.setItem('savedCities',JSON.stringify(savedCities));
+        addCity();
+        }
+    };
+    
+    //create buttons for saved cities
+    function addCity () {
+        var savedCities = JSON.parse(localStorage.getItem('savedCities')) || [];
+        var savedBtnsDiv = $('#savedCityBtns');
+        //clear saved buttons to update new saved cities, avoid multiple additions for same city
+        savedBtnsDiv.empty();
+
+        savedCities.forEach(function (city) {
+            var cityBtn = $('<button>')
+            .text(city)
+            .addClass('savedBtns')
+            .click(function () {
+                $('input[name="city"]').val(city);
+                getWeather();
+            });
+            savedBtnsDiv.append(cityBtn);
+        });
+    };
+
 //get weather data based on searched city input
-    function getApi() {
+    function getWeather() {
         var city = $('input[name="city"]').val().toUpperCase();
-        saveCity(city);
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric";
         fetch(queryURL)
         .then(function (response) {
             if(response.ok) {
+                saveCity(city);
                 return response.json();
             } else {
                 alert('Something went wrong, make sure input field is valid');
@@ -114,58 +146,18 @@ $(document).ready(function () {
 
 
             });    
-        });  
+        });
+        //Clear search input
+        $('input[name="city"]').val("");
     };  
 
-
-    // https://stackoverflow.com/questions/65546260/  <-- include() reference
-    // save the searched city to local storage if it is not already saved
-    function saveCity(city) {
-        var savedCities = JSON.parse(localStorage.getItem('savedCities')) || [];
-        if (!savedCities.includes(city)) {
-            savedCities.push(city);
-        localStorage.setItem('savedCities',JSON.stringify(savedCities));
-        addCity();
-        }
-    };
-    
-    //create buttons for saved cities
-    function addCity (city) {
-        var savedCities = JSON.parse(localStorage.getItem('savedCities')) || [];
-        var savedBtnsDiv = $('#savedCityBtns');
-        savedBtnsDiv.empty();
-
-        savedCities.forEach(function (city) {
-            var cityBtn = $('<button>')
-            .text(city)
-            .click(function () {
-                $('input[name="city"]').val(city);
-                getApi();
-            });
-            savedBtnsDiv.append(cityBtn);
-        });
-    };
-    //add city to displayed list of saved cities
+    // //get weather when search button is clicked
+    searchBtn.click(getWeather);
     addCity();
-    //get weather when search button is clicked
-    searchBtn.click(getApi);
-    $('#cityInput').val('');
+
 
 });
 
-//TEST AREA
-// for (var i = 0; i < data.length; i++) {
-    //     var temperature = $('<p>');
-    //     var humidity = $('<p>');
-    //     var windSpeed = $('<p>');
-    //     temperature.text(data[i].main.temp);
-    //     humidity.text(data[i].main.humidity);
-    //     windSpeed.text(data[i].wind.speed);
-    //     currentWeather.append(temperature);
-    //     currentWeather.append(humidity);
-    //     currentWeather.append(windSpeed);
-    
-    // };
 
     //5 day forcast
     //https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key} 
