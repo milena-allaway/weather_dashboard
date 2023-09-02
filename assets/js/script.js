@@ -1,6 +1,5 @@
 $(document).ready(function () {
     var body = $('body');
-    var pinktest = $('.pinktest');
     var apiKey = "8599c40ef0b71aabc78512d1ad0db1d5"; //apikey
     var currentHeader = $('#currentHeader');
     var fiveDayHeader = $('#fiveDayHeader');
@@ -14,30 +13,30 @@ $(document).ready(function () {
     var day5 = $('.day5');
     var date = dayjs();
     
- 
+    //align all text and hide headers for sections that don't have content yet
     body.css('text-align', 'center');
-    pinktest.css('background-color', 'pink');//test to see where divs borders are
     currentHeader.hide();
     fiveDayHeader.hide();
     
     // https://stackoverflow.com/questions/65546260/  <-- include() reference
-    // save the searched city to local storage if it is not already saved
+    // get saved cities, or create blank array if nothing saved, and save the new searched city to local storage, if it is not already saved
     function saveCity(city) {
         var savedCities = JSON.parse(localStorage.getItem('savedCities')) || [];
         if (!savedCities.includes(city)) {
             savedCities.push(city);
         localStorage.setItem('savedCities',JSON.stringify(savedCities));
         }
+        //add saved city button to saved searches section
         addCity();
     };
     
-    //create buttons for saved cities
+    //get saved city info from storage if exists
     function addCity () {
         var savedCities = JSON.parse(localStorage.getItem('savedCities')) || [];
         var savedBtnsDiv = $('#savedCityBtns');
-        //clear saved buttons to update new saved cities, avoid multiple additions for same city
+        //clear saved buttons to allow display of updated array of saved cities
         savedBtnsDiv.empty();
-
+        //create buttons for saved cities
         savedCities.forEach(function (city) {
             var cityBtn = $('<button>')
             .text(city)
@@ -68,7 +67,7 @@ $(document).ready(function () {
         })
         .then(function (data) {
         console.log(data);
-            // //get longtitude and latitude for when getting 5 day forcast
+            // //get longtitude and latitude for when getting 5 day forecast
             var lon = data.coord.lon;
             var lat = data.coord.lat;
             console.log("longtitude is " + lon + ", latitude is " + lat);
@@ -84,7 +83,7 @@ $(document).ready(function () {
             //append city name and date
             var country = data.sys.country;
             var cityDate = $('<p>').text(city + ", " + country + ", " + date.format('MM/DD/YYYY'));
-            currentWeather.append(cityDate).css("font-weight", "bold");
+            currentWeather.append(cityDate).css({"font-weight": "bold", "border": "1px solid black"});
             // create weather icon and get src/url
             var icon = data.weather[0].icon;
             var iconUrl = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
@@ -96,8 +95,7 @@ $(document).ready(function () {
             var windSpeed = $('<p>').text("Wind Speed: " + data.wind.speed + " m/s");
             currentWeather.append(weatherIcon, temperature, humidity, windSpeed);
 
-            // 5 day forcast
-
+            //get data for 5 day forecast
             var query5dayURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&" + "lon=" + lon + "&appid=" + apiKey + "&units=metric";
             fetch(query5dayURL)
             .then(function (response) {
@@ -117,7 +115,7 @@ $(document).ready(function () {
                 var humidity1 = $('<p>').text("Humidity: " + data.list[5].main.humidity + "%");
                 var windSpeed1 = $('<p>').text("Wind Speed: " + data.list[5].wind.speed + " m/s");
                 var date1 = $('<p>').text(dayjs().add(1, 'day').format('MM/DD/YYYY'));
-                day1.append(weatherIconDay1, date1, temperature1, humidity1, windSpeed1).css("font-weight", "bold");;
+                day1.append(weatherIconDay1, date1, temperature1, humidity1, windSpeed1).css({"font-weight": "bold", "border": "1px solid black"});
 
                 var iconDay2 = data.list[13].weather[0].icon;
                 var iconDay2Url = "https://openweathermap.org/img/wn/" + iconDay2 + "@2x.png"
@@ -126,7 +124,7 @@ $(document).ready(function () {
                 var humidity2 = $('<p>').text("Humidity: " + data.list[13].main.humidity + "%");
                 var windSpeed2 = $('<p>').text("Wind Speed: " + data.list[13].wind.speed + " m/s");
                 var date2 = $('<p>').text(dayjs().add(2, 'day').format('MM/DD/YYYY'));
-                day2.append(weatherIconDay2, date2, temperature2, humidity2, windSpeed2).css("font-weight", "bold");;
+                day2.append(weatherIconDay2, date2, temperature2, humidity2, windSpeed2).css({"font-weight": "bold", "border": "1px solid black"});
 
                 var iconDay3 = data.list[21].weather[0].icon;
                 var iconDay3Url = "https://openweathermap.org/img/wn/" + iconDay3 + "@2x.png"
@@ -135,7 +133,7 @@ $(document).ready(function () {
                 var humidity3 = $('<p>').text("Humidity: " + data.list[21].main.humidity + "%");
                 var windSpeed3 = $('<p>').text("Wind Speed: " + data.list[21].wind.speed + " m/s");
                 var date3 = $('<p>').text(dayjs().add(3, 'day').format('MM/DD/YYYY'));
-                day3.append(weatherIconDay3, date3, temperature3, humidity3, windSpeed3).css("font-weight", "bold");;
+                day3.append(weatherIconDay3, date3, temperature3, humidity3, windSpeed3).css({"font-weight": "bold", "border": "1px solid black"});
 
                 var iconDay4 = data.list[29].weather[0].icon;
                 var iconDay4Url = "https://openweathermap.org/img/wn/" + iconDay4 + "@2x.png"
@@ -144,7 +142,7 @@ $(document).ready(function () {
                 var humidity4 = $('<p>').text("Humidity: " + data.list[29].main.humidity + "%");
                 var windSpeed4 = $('<p>').text("Wind Speed: " + data.list[29].wind.speed + " m/s");
                 var date4 = $('<p>').text(dayjs().add(4, 'day').format('MM/DD/YYYY'));
-                day4.append(weatherIconDay4, date4, temperature4, humidity4, windSpeed4).css("font-weight", "bold");;
+                day4.append(weatherIconDay4, date4, temperature4, humidity4, windSpeed4).css({"font-weight": "bold", "border": "1px solid black"});
 
                 var iconDay5 = data.list[37].weather[0].icon;
                 var iconDay5Url = "https://openweathermap.org/img/wn/" + iconDay5 + "@2x.png"
@@ -153,7 +151,7 @@ $(document).ready(function () {
                 var humidity5 = $('<p>').text("Humidity: " + data.list[37].main.humidity + "%");
                 var windSpeed5 = $('<p>').text("Wind Speed: " + data.list[37].wind.speed + " m/s");
                 var date5 = $('<p>').text(dayjs().add(5, 'day').format('MM/DD/YYYY'));
-                day5.append(weatherIconDay5, date5, temperature5, humidity5, windSpeed5).css("font-weight", "bold");;
+                day5.append(weatherIconDay5, date5, temperature5, humidity5, windSpeed5).css({"font-weight": "bold", "border": "1px solid black"});
 
             });   
 
@@ -170,14 +168,14 @@ $(document).ready(function () {
         $('#savedCityBtns').empty();
     });
 
-    //get weather when search button is clicked
+    //get weather when search button is clicked then add new city to saved cities
     searchBtn.click(getWeather);
     addCity();
 
 });
 
-
-    //5 day forcast
+//testing:
+    //5 day forecast
     //https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key} 
 
     // https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
