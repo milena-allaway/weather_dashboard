@@ -7,7 +7,7 @@ This is a web application that provides weather information. When the user input
 N/A no installation required
 
 ## Usage
-When you visit [url insert], you will see an empty weather dashboard.
+When you visit https://milena-allaway.github.io/weather_dashboard/ , you will see an empty weather dashboard.
 ![weatherstart](https://github.com/milena-allaway/weather_dashboard/assets/132115087/1480dee1-8026-46e2-99de-63a3f564290c)
 
 You can search for a city by typing in the input form field where indicated, then click "search". The searched cities weather data will display, showing current data and a future forecast. You will see the city name and date, the weather in degrees celsius, humidity, windspeed, and an icon representing the weather conditions.
