@@ -22,10 +22,6 @@
     margin: 10px 5px;
 }
 
-/* .day1, .day2, .day3, .day4, .day5 {
-    align-items: center;
-} */
-
 #searchCityDiv {
     background-image: linear-gradient(rgb(98, 220, 245), rgb(9, 33, 151));
     font-family: Arial, Helvetica, sans-serif;
